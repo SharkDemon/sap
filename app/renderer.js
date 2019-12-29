@@ -19,12 +19,14 @@ newLinkForm.addEventListener('submit', (event) => {
     const url = newLinkUrl.value;
     // use the Fetch API to fetch the content of the provided URL
     fetch(url)
+        .then(validateResponse)
         .then(response => response.text())
         .then(parseResponse)
         .then(findTitle)
         .then(title => storeLink(title, url))
         .then(clearForm)
-        .then(renderLinks);
+        .then(renderLinks)
+        .catch(error => handleError(error, url));
 });
 
 clearStorageButton.addEventListener('click', () => {
@@ -69,6 +71,22 @@ const convertToElement = (link) => {
 const renderLinks = () => {
     const linkElements = getLinks().map(convertToElement).join('');
     linksSection.innerHTML = linkElements;
+}
+
+const validateResponse = (response) => {
+    if (response.ok) {
+        return response;
+    }
+    throw new Error(`Status code of ${response.status} ${response.statusText}`);
+}
+
+const handleError = (error, url) => {
+    // set the contents of the error message element if fetching a link fails
+    errorMessage.innerHTML = `
+There was an issue adding "${url}": ${error.message}    
+    `.trim();
+    // clear the error message after 5 seconds
+    setTimeout( () => errorMessage.innerText = null, 5000);
 }
 
 renderLinks();
