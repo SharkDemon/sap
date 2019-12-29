@@ -9,12 +9,13 @@ function createWindow() {
         width: 800,
         height: 600,
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js')
-            //nodeIntegration: true
+            preload: path.join(__dirname, 'preload.js'),
+            nodeIntegration: true
         }
     });
 
-    mainWindow.loadFile('app/index.html')
+    //mainWindow.loadFile('app/index.html')
+    mainWindow.webContents.loadFile('app/index.html')
 
     //mainWindow.webContents.openDevTools
 
@@ -23,7 +24,10 @@ function createWindow() {
     })
 }
 
-app.on('ready', createWindow)
+app.on('ready', () => {
+    console.log('Application ready')
+    createWindow()
+})
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
