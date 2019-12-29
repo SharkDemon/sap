@@ -1,4 +1,6 @@
 
+const { shell } = require('electron');
+
 const parser = new DOMParser();
 
 const linksSection = document.querySelector('.links');
@@ -32,6 +34,13 @@ newLinkForm.addEventListener('submit', (event) => {
 clearStorageButton.addEventListener('click', () => {
     localStorage.clear();
     linksSection.innerHTML = '';
+});
+
+linksSection.addEventListener('click', (event) => {
+    if (event.target.href) {
+        event.preventDefault();
+        shell.openExternal(event.target.href);
+    }
 });
 
 const clearForm = () => {
@@ -73,13 +82,6 @@ const renderLinks = () => {
     linksSection.innerHTML = linkElements;
 }
 
-const validateResponse = (response) => {
-    if (response.ok) {
-        return response;
-    }
-    throw new Error(`Status code of ${response.status} ${response.statusText}`);
-}
-
 const handleError = (error, url) => {
     // set the contents of the error message element if fetching a link fails
     errorMessage.innerHTML = `
@@ -87,6 +89,13 @@ There was an issue adding "${url}": ${error.message}
     `.trim();
     // clear the error message after 5 seconds
     setTimeout( () => errorMessage.innerText = null, 5000);
+}
+
+const validateResponse = (response) => {
+    if (response.ok) {
+        return response;
+    }
+    throw new Error(`Status code of ${response.status} ${response.statusText}`);
 }
 
 renderLinks();
