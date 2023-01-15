@@ -1,4 +1,4 @@
-[![HitCount](http://hits.dwyl.io/SharkDemon/sap.svg)](http://hits.dwyl.io/SharkDemon/sap)
+[![HitCount](http://hits.dwyl.com/SharkDemon/sap.svg)](http://hits.dwyl.com/SharkDemon/sap)
 
 # sap
  
